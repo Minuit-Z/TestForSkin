@@ -10,6 +10,11 @@ public class SkinAttr {
     private String mResourceName;
     private SkinType mType;
 
+    public SkinAttr(String resName, SkinType type) {
+        this.mResourceName=resName;
+        this.mType=type;
+    }
+
     public void skin(View mView) {
         mType.skin(mView,mResourceName);
     }

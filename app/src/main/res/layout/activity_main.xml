@@ -9,11 +9,32 @@
 
     <Button
         android:id="@+id/btn"
+        android:textColor="@color/myColorText"
+        android:background="@color/myBg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="change"/>
+        android:text="换肤"/>
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/btn_recover"
+        android:textColor="@color/myColorText"
+        android:background="@color/myBg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="恢复"/>
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/btn_next"
+        android:textColor="@color/myColorText"
+        android:background="@color/myBg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跳转"/>
 
     <ImageView
+        android:layout_marginTop="10dp"
         android:id="@+id/iv"
         android:src="@mipmap/ic_test"
         android:layout_width="wrap_content"

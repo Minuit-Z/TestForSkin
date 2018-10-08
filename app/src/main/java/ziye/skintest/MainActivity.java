@@ -1,9 +1,11 @@
 package ziye.skintest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.LayoutInflaterFactory;
@@ -20,16 +22,19 @@ import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import ziye.skin.SkinAttrSupport;
+import ziye.skin.SkinManager;
 import ziye.skin.SkinViewInflater;
 import ziye.skin.attr.SkinAttr;
 import ziye.skin.attr.SkinView;
 
 public class MainActivity extends AppCompatActivity implements LayoutInflaterFactory {
 
-    TextView btn;
+    TextView btnChange, btnRecover, btnNext;
     ImageView iv;
     private SkinViewInflater mAppCompatViewInflater;
     private static final boolean IS_PRE_LOLLIPOP = Build.VERSION.SDK_INT < 21;
@@ -40,8 +45,11 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         LayoutInflaterCompat.setFactory(inflater, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SkinManager.getInstance().init(this);
 
-        btn = findViewById(R.id.btn);
+        btnChange = findViewById(R.id.btn);
+        btnRecover = findViewById(R.id.btn_recover);
+        btnNext = findViewById(R.id.btn_next);
         iv = findViewById(R.id.iv);
 
         iv.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
@@ -77,6 +85,34 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
 //                }
 //            }
 //        });
+
+        // 使用框架换肤
+        btnChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator + "red.zip";
+
+                //换肤
+                int result = SkinManager.getInstance().loadSkin(path);
+            }
+        });
+
+        //恢复默认
+        btnRecover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int result = SkinManager.getInstance().loadDefault();
+
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,MainActivity.class));
+            }
+        });
     }
 
 
@@ -91,14 +127,32 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         //2. 解析属性
         //2.1 一个Activity布局对应多个SkinView
         if (v != null) {
-            List<SkinAttr> skin = SkinAttrSupport.getSkinAttrs(context, attrs);
-            SkinView skinView = new SkinView(v, skin);
+            List<SkinAttr> skinAttrs = SkinAttrSupport.getSkinAttrs(context, attrs);
+            SkinView skinView = new SkinView(v, skinAttrs);
+
+            //3. 统一去管理,交给Manager处理
+            managerSkinView(skinView);
         }
 
-        //3. 统一去管理,交给Manager处理
 
-        return super.onCreateView(parent, name, context, attrs);
+        return v;
 
+    }
+
+    /**
+     * @author 张子扬
+     * @time 2018/10/8 0008 10:30
+     * @desc 统一管理skinView
+     */
+    private void managerSkinView(SkinView skinView) {
+        List<SkinView> skinViews = SkinManager.getInstance().getSkinViews(this);
+
+        if (skinViews==null){
+            skinViews=new ArrayList<>();
+            SkinManager.getInstance().register(this,skinViews);
+        }
+
+        skinViews.add(skinView);
     }
 
 
