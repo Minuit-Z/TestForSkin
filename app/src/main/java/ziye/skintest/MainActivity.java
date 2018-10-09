@@ -12,6 +12,7 @@ import android.support.v4.view.LayoutInflaterFactory;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatViewInflater;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,33 +27,38 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import ziye.callback.ISkinChangeInterface;
 import ziye.skin.SkinAttrSupport;
 import ziye.skin.SkinManager;
+import ziye.skin.SkinResource;
 import ziye.skin.SkinViewInflater;
 import ziye.skin.attr.SkinAttr;
 import ziye.skin.attr.SkinView;
+import ziye.utils.SpHelper;
 
-public class MainActivity extends AppCompatActivity implements LayoutInflaterFactory {
+public class MainActivity extends AppCompatActivity implements LayoutInflaterFactory, ISkinChangeInterface {
 
     TextView btnChange, btnRecover, btnNext;
     ImageView iv;
     private SkinViewInflater mAppCompatViewInflater;
+    private Context mContext;
     private static final boolean IS_PRE_LOLLIPOP = Build.VERSION.SDK_INT < 21;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LayoutInflater inflater = LayoutInflater.from(this);
+        SkinManager.getInstance(this).init();
         LayoutInflaterCompat.setFactory(inflater, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SkinManager.getInstance().init(this);
+        mContext = this;
 
         btnChange = findViewById(R.id.btn);
         btnRecover = findViewById(R.id.btn_recover);
         btnNext = findViewById(R.id.btn_next);
         iv = findViewById(R.id.iv);
 
-        iv.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
+//        iv.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
 
 //        btn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -94,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
                         + File.separator + "red.zip";
 
                 //换肤
-                int result = SkinManager.getInstance().loadSkin(path);
+                int result = SkinManager.getInstance(mContext).loadSkin(path);
             }
         });
 
@@ -102,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         btnRecover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int result = SkinManager.getInstance().loadDefault();
+                int result = SkinManager.getInstance(mContext).loadDefault();
 
             }
         });
@@ -110,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,MainActivity.class));
+                startActivity(new Intent(MainActivity.this, MainActivity.class));
             }
         });
     }
@@ -132,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
 
             //3. 统一去管理,交给Manager处理
             managerSkinView(skinView);
+
+            //4. 判断是否初始就需要换肤
+            SkinManager.getInstance(this).checkChangeSkin(skinView);
         }
 
 
@@ -145,11 +154,11 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
      * @desc 统一管理skinView
      */
     private void managerSkinView(SkinView skinView) {
-        List<SkinView> skinViews = SkinManager.getInstance().getSkinViews(this);
+        List<SkinView> skinViews = SkinManager.getInstance(this).getSkinViews(this);
 
-        if (skinViews==null){
-            skinViews=new ArrayList<>();
-            SkinManager.getInstance().register(this,skinViews);
+        if (skinViews == null) {
+            skinViews = new ArrayList<>();
+            SkinManager.getInstance(this).register(this, skinViews);
         }
 
         skinViews.add(skinView);
@@ -245,6 +254,11 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
                 return null;
             }
         });
+
+    }
+
+    @Override
+    public void changeSkin(SkinResource resource) {
 
     }
 }

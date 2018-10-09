@@ -1,15 +1,12 @@
 package ziye.skin;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -38,8 +35,9 @@ public class SkinResource {
             resources = new Resources(manager, superResource.getDisplayMetrics(),
                     superResource.getConfiguration());
 
-            PackageInfo packageArchiveInfo = context.getPackageManager().getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES);
-            mPackageName = packageArchiveInfo.packageName;
+            mPackageName = context.getPackageManager().
+                    getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES)
+                    .packageName;
 //            int drawableID2 = resources.getIdentifier("ic_test", "drawable", "ziye.skinplugin");
 //            Drawable drawable = resources.getDrawable(drawableID2);
 //
@@ -57,10 +55,10 @@ public class SkinResource {
     }
 
     /**
-    *@author 张子扬
-    *@time 2018/10/8 0008 14:02
-    *@desc 通过名字获取图片
-    */
+     * @author 张子扬
+     * @time 2018/10/8 0008 14:02
+     * @desc 通过名字获取图片
+     */
     public Drawable getDrawableByName(String resourceName) {
         try {
             int drawableID = resources.getIdentifier(resourceName, "drawable", mPackageName);
@@ -72,10 +70,10 @@ public class SkinResource {
     }
 
     /**
-    *@author 张子扬
-    *@time 2018/10/8 0008 14:02
-    *@desc 通过名字获取颜色
-    */
+     * @author 张子扬
+     * @time 2018/10/8 0008 14:02
+     * @desc 通过名字获取颜色
+     */
     public ColorStateList getColorByName(String colorName) {
         try {
             int drawableID = resources.getIdentifier(colorName, "color", mPackageName);
