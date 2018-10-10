@@ -261,4 +261,11 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
     public void changeSkin(SkinResource resource) {
 
     }
+
+    @Override
+    protected void onDestroy() {
+        //防止内存泄漏
+        SkinManager.getInstance(this).unregister(this);
+        super.onDestroy();
+    }
 }

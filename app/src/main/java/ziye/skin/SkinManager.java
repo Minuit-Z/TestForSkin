@@ -109,7 +109,7 @@ public class SkinManager {
 
         //保存皮肤的状态
         saveSkinStatusPath(path);
-        return 0;
+        return Config.STATUS_CHANGE_SUCCESS;
     }
 
     /**
@@ -124,6 +124,9 @@ public class SkinManager {
             for (SkinView skinView : skinViews) {
                 skinView.skin();
             }
+
+            //通知回调
+            key.changeSkin(skinResource);
         }
     }
 
@@ -148,7 +151,7 @@ public class SkinManager {
 
         //皮肤信息清空
         saveSkinStatusPath("");
-        return Config.STATUS_CHANGE_SECCESS;
+        return Config.STATUS_CHANGE_SUCCESS;
     }
 
     //通过Activity获取属性集
@@ -185,5 +188,10 @@ public class SkinManager {
         if (!TextUtils.isEmpty(path)) {
             skinView.skin();
         }
+    }
+
+    public void unregister(ISkinChangeInterface iSkin) {
+        //aty退出时, map持有的相应的引用置空
+        mSkinViews.remove(iSkin);
     }
 }
