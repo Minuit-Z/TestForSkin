@@ -9,34 +9,53 @@
 
     <Button
         android:id="@+id/btn"
-        android:textColor="@color/myColorText"
-        android:background="@color/myBg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="换肤"/>
+        android:background="@color/myBg"
+        android:text="换肤"
+        android:textColor="@color/myColorText" />
 
     <Button
-        android:layout_marginTop="10dp"
         android:id="@+id/btn_recover"
-        android:textColor="@color/myColorText"
-        android:background="@color/myBg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="恢复"/>
+        android:layout_marginTop="10dp"
+        android:background="@color/myBg"
+        android:text="恢复"
+        android:textColor="@color/myColorText" />
 
     <Button
-        android:layout_marginTop="10dp"
         android:id="@+id/btn_next"
-        android:textColor="@color/myColorText"
-        android:background="@color/myBg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="跳转"/>
+        android:layout_marginTop="10dp"
+        android:background="@color/myBg"
+        android:text="跳转"
+        android:textColor="@color/myColorText" />
 
     <ImageView
-        android:layout_marginTop="10dp"
         android:id="@+id/iv"
-        android:src="@mipmap/ic_test"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/ic_test" />
+
+    <ziye.widget.DownloadProgressView
+        android:id="@+id/download_progress_bar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_centerInParent="true"
+        app:circleColor="#000000"
+        app:radius="15dp"
+        app:ringBgColor="#ffffff"
+        app:ringColor="#00d5df"
+        app:strokeWidth="3dp" />
+
+    <ziye.widget.MyTextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:radius="10dp"
+        app:color="@color/colorAccent"
+        app:strokeWidth="4dp"
+        />
 </LinearLayout>

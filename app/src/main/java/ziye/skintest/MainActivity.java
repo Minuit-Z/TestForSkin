@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ThemedSpinnerAdapter;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -35,6 +36,7 @@ import ziye.skin.SkinViewInflater;
 import ziye.skin.attr.SkinAttr;
 import ziye.skin.attr.SkinView;
 import ziye.utils.SpHelper;
+import ziye.widget.DownloadProgressView;
 
 public class MainActivity extends AppCompatActivity implements LayoutInflaterFactory, ISkinChangeInterface {
 
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
     private SkinViewInflater mAppCompatViewInflater;
     private Context mContext;
     private static final boolean IS_PRE_LOLLIPOP = Build.VERSION.SDK_INT < 21;
+
+    private DownloadProgressView progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,25 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         btnRecover = findViewById(R.id.btn_recover);
         btnNext = findViewById(R.id.btn_next);
         iv = findViewById(R.id.iv);
+
+        progress = findViewById(R.id.download_progress_bar);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    for (int i=0;;) {
+                        i++;
+                        Thread.sleep(100);
+                        progress.setProgress(i % 100);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        ).start();
+        progress.setProgress(70);
 
 //        iv.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
 
@@ -117,6 +140,14 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, MainActivity.class));
+            }
+        });
+
+        btnNext.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                startActivity(new Intent(MainActivity.this, SecondActivity.class));
+                return true;
             }
         });
     }
