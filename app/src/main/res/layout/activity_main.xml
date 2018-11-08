@@ -54,8 +54,28 @@
     <ziye.widget.MyTextView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        app:radius="10dp"
         app:color="@color/colorAccent"
-        app:strokeWidth="4dp"
-        />
+        app:radius="10dp"
+        app:strokeWidth="4dp" />
+
+    <ziye.widget.MyStyleButton
+        android:id="@+id/btn_switch"
+        android:layout_width="77dp"
+        android:layout_height="23dp"
+        android:layout_marginLeft="20dp"
+        app:bézier="20"
+        app:leftText="最新"
+        app:rightText="热门"
+        app:textSize="12sp" />
+
+    <ziye.widget.banner.BannerView
+        android:id="@+id/banner"
+        app:dotSize="8dp"
+        app:dotDistance="10dp"
+        app:dotGravity="center"
+        app:withProportion="8"
+        app:heightProportion="3"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="10dp"></ziye.widget.banner.BannerView>
 </LinearLayout>

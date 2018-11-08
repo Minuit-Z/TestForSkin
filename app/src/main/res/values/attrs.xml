@@ -4,9 +4,7 @@
     <attr name="strokeWidth" format="dimension" />
 
     <declare-styleable name="DeleteEditText">
-
         <attr name="delIcon" format="reference" />
-
     </declare-styleable>
 
     <!--圆弧进度条-->
@@ -22,6 +20,42 @@
         <attr name="radius" />
         <attr name="strokeWidth" />
         <attr name="color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="MyStyleButton">
+        <attr name="checkedColor" format="color"/>
+        <attr name="defaultColor" format="color"/>
+        <!--中心角度-->
+        <attr name="centerRadius" format="integer"/>
+        <attr name="leftText" format="string"/>
+        <attr name="rightText" format="string"/>
+        <!--文字大小-->
+        <attr name="textSize" format="dimension"/>
+        <!--贝塞尔曲线起始点偏移-->
+        <attr name="bézier" format="integer"/>
+    </declare-styleable>
+
+    <!-- 轮播条 -->
+    <declare-styleable name="BannerView">
+        <!-- 点的选中的颜色值 -->
+        <attr name="dotIndicatorFocus"  format="color|reference"/>
+        <!-- 点的默认的颜色值 -->
+        <attr name="dotIndicatorNormal"  format="color|reference"/>
+        <!-- 点的大小 -->
+        <attr name="dotSize" format="dimension"/>
+        <!-- 点的间距 -->
+        <attr name="dotDistance" format="dimension"/>
+        <!-- 点的位置 -->
+        <attr name="dotGravity" format="enum">
+            <enum name="center" value="0"/>
+            <enum name="right" value="1"/>
+            <enum name="left" value="-1"/>
+        </attr>
+        <!-- 底部的颜色 -->
+        <attr name="bottomColor" format="color"/>
+        <!-- 定义宽高比 -->
+        <attr name="withProportion" format="float"/>
+        <attr name="heightProportion" format="float"/>
     </declare-styleable>
 
 </resources>

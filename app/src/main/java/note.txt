@@ -1,0 +1,3 @@
+
+ 1. 让Activity继承LayoutInflaterFactory接口并重写onCreateView , 在实现后 , 即可在View创建之前拦截
+ 然后搞一些事情

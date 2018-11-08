@@ -25,18 +25,27 @@ import android.widget.ThemedSpinnerAdapter;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import ziye.callback.ISkinChangeInterface;
+import ziye.hook.Knife;
+import ziye.hook.KnifeHook;
+import ziye.hook.Person;
 import ziye.skin.SkinAttrSupport;
 import ziye.skin.SkinManager;
 import ziye.skin.SkinResource;
 import ziye.skin.SkinViewInflater;
 import ziye.skin.attr.SkinAttr;
 import ziye.skin.attr.SkinView;
+import ziye.utils.JUtils;
 import ziye.utils.SpHelper;
 import ziye.widget.DownloadProgressView;
+import ziye.widget.MyStyleButton;
+import ziye.widget.banner.BannerAdapter;
+import ziye.widget.banner.BannerView;
+import ziye.widget.banner.IBannerItemListener;
 
 public class MainActivity extends AppCompatActivity implements LayoutInflaterFactory, ISkinChangeInterface {
 
@@ -47,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
     private static final boolean IS_PRE_LOLLIPOP = Build.VERSION.SDK_INT < 21;
 
     private DownloadProgressView progress;
+    private MyStyleButton btn_switch;
+    private BannerView banner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         btnRecover = findViewById(R.id.btn_recover);
         btnNext = findViewById(R.id.btn_next);
         iv = findViewById(R.id.iv);
+        btn_switch=findViewById(R.id.btn_switch);
+        banner=findViewById(R.id.banner);
 
         progress = findViewById(R.id.download_progress_bar);
 
@@ -68,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
             @Override
             public void run() {
                 try {
-                    for (int i=0;;) {
+                    for (int i = 0; ; ) {
                         i++;
                         Thread.sleep(100);
                         progress.setProgress(i % 100);
@@ -80,6 +93,16 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         }
         ).start();
         progress.setProgress(70);
+
+
+        btn_switch.setOnClickListener(new MyStyleButton.OnSwitchClick() {
+            @Override
+            public void currentState(String sortBy) {
+                Log.e( "currentState: ", sortBy);
+            }
+        });
+
+        test();
 
 //        iv.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_background));
 
@@ -152,6 +175,60 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         });
     }
 
+    private void test() {
+//        Person hero = new Person(new Knife());
+//        try {
+//            Field weapon = hero.getClass().getDeclaredField("weaponMain");
+//            weapon.setAccessible(true);
+//            Knife weaponHook = new KnifeHook();
+//            ((KnifeHook) weaponHook).setOnUseWeaponAttackListener(
+//                    new KnifeHook.OnUseWeaponAttackListener() {
+//                        @Override
+//                        public int getKnifeDamage(int damage) {
+//                            //通过后门进行操作，这其实就是我们注入的代码
+//                            Log.e( "getKnifeDamage: ",damage+"" );
+//                            return damage;
+//                        }
+//                    });
+//            weapon.set(hero, weaponHook); //偷天换日
+//            hero.attack();
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+
+        final List<Integer> resourseList=new ArrayList<>();
+        resourseList.add(R.drawable.ic_launcher_background);
+        resourseList.add(R.drawable.ic_launcher_foreground);
+        resourseList.add(R.drawable.ic_test);
+        banner.setAdapter(new BannerAdapter() {
+            @Override
+            public View getView(int position, View convertView) {
+                if (convertView == null) {
+                    convertView = new ImageView(mContext);
+                }
+                ((ImageView) convertView).setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+//                Glide.with(mContext).load(banners.get(position).getUrl()).into((ImageView) convertView);
+                ((ImageView) convertView).setImageDrawable(getResources().getDrawable(resourseList.get(position)));
+                return convertView;
+            }
+
+            @Override
+            public int getCount() {
+                return resourseList.size();
+            }
+        });
+        banner.setOnBannerViewClickListener(new IBannerItemListener() {
+            @Override
+            public void click(int position) {
+                Log.e("click: ", position+"");
+            }
+        });
+        banner.startRoll();
+    }
+
 
     //拦截View的创建
     @Override
@@ -195,6 +272,22 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         skinViews.add(skinView);
     }
 
+
+    /**
+     * @author 张子扬
+     * @time 2018/10/24 0024 9:50
+     * @desc 手动创建View
+     * setContentView的本质: 在AppCompatDelegate的create方法里 , 会针对SDK的version调用不同的create:
+     * 如23, 14, 11,7 , 每种创建都继承自最低的版本,所以直接从最低版本入手.即调用v7里面的setContextView方法
+     * <p>
+     * 在接下来的createView方法中会根据你的控件名,来new一些AppCompatxxx并返回
+     * <p>
+     * layoutInflate用来解析layout布局
+     * <p>
+     * 在实例化View的时候 , 会判断是否自己实例化factory,以此来拦截View的创建; LayoutInflaterCompat.setFactory();
+     * appCompat设置了, 所以会返回AppCompatxxx;
+     * 接下来通过反射来创建View
+     */
 
     public View createView(View parent, final String name, @NonNull Context context,
                            @NonNull AttributeSet attrs) {

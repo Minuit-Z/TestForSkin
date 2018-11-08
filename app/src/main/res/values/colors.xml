@@ -7,4 +7,5 @@
 
     <color name="myColorText">#333132</color>
     <color name="myBg">#8e8d8a</color>
+    <color name="TRANSPARENT">#0000</color>
 </resources>
