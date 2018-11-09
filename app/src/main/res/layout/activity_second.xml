@@ -24,5 +24,9 @@
         android:layout_height="wrap_content"
         android:text="获取密码"/>
 
+    <ExpandableListView
+        android:id="@+id/expanded_rcy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ExpandableListView>
 
 </LinearLayout>

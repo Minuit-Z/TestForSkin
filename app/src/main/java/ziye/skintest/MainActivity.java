@@ -162,14 +162,14 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MainActivity.class));
+                startActivity(new Intent(MainActivity.this, SecondActivity.class));
             }
         });
 
         btnNext.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startActivity(new Intent(MainActivity.this, SecondActivity.class));
+                startActivity(new Intent(MainActivity.this, ThreeActivity.class));
                 return true;
             }
         });

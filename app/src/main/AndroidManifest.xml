@@ -22,6 +22,7 @@
         </activity>
 
         <activity android:name=".SecondActivity"></activity>
+        <activity android:name=".ThreeActivity"></activity>
         <service android:name="ziye.service.MessageService">
 
             <intent-filter>
