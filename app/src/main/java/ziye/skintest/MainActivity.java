@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewParent;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ThemedSpinnerAdapter;
@@ -30,6 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ziye.callback.ISkinChangeInterface;
+import ziye.dagger.Beanss;
+import ziye.dagger.DaggerTest;
+import ziye.dagger.Hero;
+import ziye.dagger.MyMoudle;
+import ziye.dagger.component.DaggerHeroComponent;
+import ziye.dagger.component.HeroComponent;
 import ziye.hook.Knife;
 import ziye.hook.KnifeHook;
 import ziye.hook.Person;
@@ -49,7 +56,7 @@ import ziye.widget.banner.IBannerItemListener;
 
 public class MainActivity extends AppCompatActivity implements LayoutInflaterFactory, ISkinChangeInterface {
 
-    TextView btnChange, btnRecover, btnNext;
+    TextView btnChange, btnRecover, btnNext,btnExpaned;
     ImageView iv;
     private SkinViewInflater mAppCompatViewInflater;
     private Context mContext;
@@ -58,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
     private DownloadProgressView progress;
     private MyStyleButton btn_switch;
     private BannerView banner;
+    private Button btnSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
         iv = findViewById(R.id.iv);
         btn_switch=findViewById(R.id.btn_switch);
         banner=findViewById(R.id.banner);
+        btnSocket=findViewById(R.id.btn_socket);
 
         progress = findViewById(R.id.download_progress_bar);
 
@@ -173,9 +182,19 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
                 return true;
             }
         });
+
+        btnSocket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SocketTestActivity.class));
+            }
+        });
     }
 
     private void test() {
+        /**
+         * hook
+         */
 //        Person hero = new Person(new Knife());
 //        try {
 //            Field weapon = hero.getClass().getDeclaredField("weaponMain");
@@ -198,6 +217,9 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
 //            e.printStackTrace();
 //        }
 
+        /**
+         * banner
+         */
         final List<Integer> resourseList=new ArrayList<>();
         resourseList.add(R.drawable.ic_launcher_background);
         resourseList.add(R.drawable.ic_launcher_foreground);
@@ -227,6 +249,16 @@ public class MainActivity extends AppCompatActivity implements LayoutInflaterFac
             }
         });
         banner.startRoll();
+
+
+//        DaggerTest test=new DaggerTest();
+//        test.test();
+        HeroComponent heroComponent= DaggerHeroComponent.create();
+        Hero hero = heroComponent.getHero();
+        hero.printDefense();
+
+        Beanss myMoudle = heroComponent.getMyMoudle();
+        Log.e( "test: ", myMoudle.attack+"");
     }
 
 

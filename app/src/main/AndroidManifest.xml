@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ziye.skintest">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".MyApplication"
@@ -21,16 +25,31 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SecondActivity"></activity>
-        <activity android:name=".ThreeActivity"></activity>
+        <activity android:name=".SecondActivity" />
+        <activity android:name=".ThreeActivity" />
+        <activity android:name=".FourActivity" />
+        <activity android:name=".SocketTestActivity"/>
+        <activity android:name=".BinderPoolActivity"/>
+
         <service android:name="ziye.service.MessageService">
-
             <intent-filter>
-                <action android:name="com.minuit.aidl"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.minuit.aidl" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+        <service
+            android:name="ziye.service.MessengerService"
+            android:process=":messenger"/>
+
+        <service android:name="ziye.aidls.BookManagerService"
+            android:process=":book"/>
+        <service android:name="ziye.service.TCPServerService"
+            android:process=":socket_test"/>
+
+        <service
+            android:name="ziye.service.BindPoolService"
+            android:process=":binder_pool"/>
     </application>
 
 </manifest>

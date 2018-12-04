@@ -2,8 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "ziye.skintest"
+        multiDexEnabled true
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
@@ -16,9 +18,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'src/main/aidl']
+        }
+    }
 }
 
 dependencies {
+    final RX_VERSION = '1.0.0'
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
@@ -30,4 +39,17 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:27.1.0'
     //Gson
     compile 'com.google.code.gson:gson:2.8.0'
+
+    //brvah
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+
+    //依赖注入框架
+    compile 'com.google.dagger:dagger:2.5'
+    compile 'com.google.dagger:dagger-compiler:2.5'
+    compile "io.reactivex:rxandroid:$RX_VERSION"
+    compile "io.reactivex:rxjava:$RX_VERSION"
+
+    annotationProcessor 'com.google.dagger:dagger:2.5'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.5'
+
 }
